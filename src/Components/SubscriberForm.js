@@ -15,50 +15,33 @@ export default class SubscriberForm extends Component {
                 fields: [],
             }
         };
-
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
-        this.setState({
-            formData: {
-                ...this.state.formData,
-                [name]: value
-            }
-        }, () => {
-            this.props.onChange(this.state.formData);
-        });
     }
 
     render() {
+        //const data = this.state.formData;
         const data = this.props.data;
-
         return (
             <Form>
                 <input type="hidden" value={data.id ? data.id : ''}/>
                 <Form.Group controlId="formName">
                     <Form.Label size="sm">Name</Form.Label>
-                    <Form.Control name="name" type="text" value={data.name} onChange={this.handleChange}/>
+                    <Form.Control name="name" type="text" value={data.name} onChange={this.props.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control name="email" type="email" value={data.email} onChange={this.handleChange}/>
+                    <Form.Control name="email" type="email" value={data.email} onChange={this.props.onChange}/>
                 </Form.Group>
 
                 <Form.Group controlId="formState">
                     <Form.Label>State</Form.Label>
-                    <Form.Control as="select" name="state" value={data.state} onChange={this.handleChange}>
+                    <Form.Control as="select" name="state" value={data.state} onChange={this.props.onChange}>
                         <option value=""></option>
+                        <option value="unconfirmed">Unconfirmed</option>
                         <option value="active">Active</option>
                         <option value="unsubscribed">Unsubscribed</option>
                         <option value="junk">Junk</option>
                         <option value="bounced">Bounced</option>
-                        <option value="unconfirmed">Unconfirmed</option>
                     </Form.Control>
                 </Form.Group>
 

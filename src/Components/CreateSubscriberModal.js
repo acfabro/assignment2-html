@@ -4,7 +4,6 @@ import axios from 'axios';
 import SubscriberForm from "./SubscriberForm";
 
 import config from '../config';
-
 const API_URL = config.API_URL;
 
 export default class CreateSubscriberModal extends Component {
@@ -28,6 +27,7 @@ export default class CreateSubscriberModal extends Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
     }
 
     handleClose = () => {
@@ -48,8 +48,6 @@ export default class CreateSubscriberModal extends Component {
     };
 
     handleSave = () => {
-        console.log('Saving: ', this.state.formData);
-
         this.setState({
             isSaving: true,
             showErrorAlert: false,
@@ -80,6 +78,19 @@ export default class CreateSubscriberModal extends Component {
         });
     }
 
+    handleFormChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                [name]: value
+            }
+        });
+    }
+
     render() {
         return (
             <Modal show={this.props.show} onHide={this.handleClose}>
@@ -93,7 +104,7 @@ export default class CreateSubscriberModal extends Component {
                     <Alert variant="success" show={this.state.showSuccessAlert}>
                         {this.state.successText}
                     </Alert>
-                    <SubscriberForm data={this.state.formData} onChange={this.handleChange}/>
+                    <SubscriberForm data={this.state.formData} onChange={this.handleFormChange}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>

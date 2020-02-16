@@ -42,8 +42,8 @@ export default class SubscriberList extends Component {
 
     handleShowEditSubscriber = (item) => {
         this.setState({
-            showEditSubscriberModal: true,
             formData: item,
+            showEditSubscriberModal: true,
         });
     };
 
