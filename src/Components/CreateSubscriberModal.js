@@ -26,13 +26,15 @@ export default class CreateSubscriberModal extends Component {
             },
         };
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleAddField = this.handleAddField.bind(this);
         this.handleFieldsChange = this.handleFieldsChange.bind(this);
         this.handleDeleteField = this.handleDeleteField.bind(this);
     }
 
+    /**
+     * reset all data and call the parent close handler to close this modal
+     */
     handleClose = () => {
         this.setState({
             isSaving: false,
@@ -50,6 +52,9 @@ export default class CreateSubscriberModal extends Component {
         this.props.onClose();
     };
 
+    /**
+     * call the create subscriber API to save
+     */
     handleSave = () => {
         console.log('Saving:', this.state.formData);
 
@@ -67,6 +72,8 @@ export default class CreateSubscriberModal extends Component {
                     showSuccessAlert: true,
                     successText: response.data.message,
                 });
+
+                this.handleClose();
             })
             .catch((error) => {
                 this.setState({
@@ -76,12 +83,6 @@ export default class CreateSubscriberModal extends Component {
                 });
             })
     };
-
-    handleChange(formData) {
-        this.setState({
-            formData
-        });
-    }
 
     /**
      * handle changes in the inner form
@@ -177,6 +178,15 @@ export default class CreateSubscriberModal extends Component {
                     />
                 </Modal.Body>
                 <Modal.Footer>
+                    <div style={{width: '100%'}}>
+                        <Alert variant="danger" show={this.state.showErrorAlert} className="block">
+                            {this.state.errorText}
+                        </Alert>
+                        <Alert variant="success" show={this.state.showSuccessAlert} className="block">
+                            {this.state.successText}
+                        </Alert>
+                    </div>
+
                     <Button variant="secondary" onClick={this.handleClose}>
                         Close
                     </Button>

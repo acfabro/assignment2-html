@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Form, Row, Col} from "react-bootstrap";
+import {Button, Form, Row, Col, Badge} from "react-bootstrap";
 
 export default class SubscriberForm extends Component {
 
@@ -84,6 +84,8 @@ export default class SubscriberForm extends Component {
                     </Form.Control>
                 </Form.Group>
 
+                <hr/>
+
                 {data.fields.length > 0 &&
                     <h5>Fields</h5>
                 }
@@ -91,7 +93,10 @@ export default class SubscriberForm extends Component {
                 {data.fields && data.fields.map((item, index) => (
                     <div key={index}>
                         <Form.Group as={Row} controlId="newTitle">
-                            <Form.Label column md="3">Title</Form.Label>
+                            <Form.Label column md="3">
+                                <Badge variant="secondary" className="mr-1">{index}</Badge>
+                                Title
+                            </Form.Label>
                             <Col md="9">
                                 <Form.Control
                                     type="text"
@@ -139,7 +144,6 @@ export default class SubscriberForm extends Component {
                         </Form.Group>
 
                         <hr/>
-
                     </div>
                 ))}
 
@@ -148,14 +152,14 @@ export default class SubscriberForm extends Component {
                     <Form.Group as={Row} controlId="newTitle">
                         <Form.Label column md="3">Title</Form.Label>
                         <Col md="9">
-                            <Form.Control type="text" name="title" onChange={this.changeAddField}/>
+                            <Form.Control type="text" name="title" value={this.state.newField.title} onChange={this.changeAddField}/>
                         </Col>
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="newType">
                         <Form.Label column md="3">Type</Form.Label>
                         <Col md="9">
-                            <Form.Control as="select" name="type" onChange={this.changeAddField}>
+                            <Form.Control as="select" name="type" value={this.state.newField.type} onChange={this.changeAddField}>
                                 <option value=""></option>
                                 <option value="string">String</option>
                                 <option value="number">Number</option>
@@ -168,7 +172,7 @@ export default class SubscriberForm extends Component {
                     <Form.Group as={Row} controlId="newTitle">
                         <Form.Label column md="3">Value</Form.Label>
                         <Col md="9">
-                            <Form.Control type="text" name="value" onChange={this.changeAddField}/>
+                            <Form.Control type="text" name="value" value={this.state.newField.value} onChange={this.changeAddField}/>
                         </Col>
                     </Form.Group>
 

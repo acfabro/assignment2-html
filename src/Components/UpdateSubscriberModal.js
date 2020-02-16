@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Modal, Button, Spinner, Alert} from "react-bootstrap";
 import axios from "axios";
 import SubscriberForm from "./SubscriberForm";
+import {animateScroll} from 'react-scroll';
 
 import config from '../config';
 
@@ -30,7 +31,6 @@ export default class UpdateSubscriberModal extends Component {
             },
         };
 
-        this.handleDelete = this.handleDelete.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleAddField = this.handleAddField.bind(this);
         this.handleFieldsChange = this.handleFieldsChange.bind(this);
@@ -90,6 +90,7 @@ export default class UpdateSubscriberModal extends Component {
                     showSuccessAlert: true,
                     successText: response.data.message,
                 });
+                this.handleClose();
             })
             .catch((error) => {
                 this.setState({
@@ -97,6 +98,7 @@ export default class UpdateSubscriberModal extends Component {
                     showErrorAlert: true,
                     errorText: error.response ? error.response.data.message : 'An error occurred',
                 });
+                animateScroll.scrollToTop();
             })
     };
 
@@ -125,6 +127,7 @@ export default class UpdateSubscriberModal extends Component {
                     showErrorAlert: true,
                     errorText: error.response ? error.response.data.message : 'An error occurred',
                 });
+                animateScroll.scrollToTop();
             })
     }
 
@@ -157,6 +160,7 @@ export default class UpdateSubscriberModal extends Component {
 
         const fields = this.state.formData.fields;
         fields[index] = {
+            ...fields[index],
             [name]: value
         };
 
@@ -167,6 +171,8 @@ export default class UpdateSubscriberModal extends Component {
                     ...this.state.formData.fields
                 ]
             }
+        }, () => {
+            console.log('Fields1', this.state.formData);
         });
     }
 
@@ -192,6 +198,7 @@ export default class UpdateSubscriberModal extends Component {
                         showErrorAlert: true,
                         errorText: error.response ? error.response.data.message : 'An error occurred',
                     });
+                    animateScroll.scrollToTop();
                 });
         }
 
@@ -256,6 +263,15 @@ export default class UpdateSubscriberModal extends Component {
                     }
                 </Modal.Body>
                 <Modal.Footer>
+                    <div style={{width: '100%'}}>
+                        <Alert variant="danger" show={this.state.showErrorAlert} className="block">
+                            {this.state.errorText}
+                        </Alert>
+                        <Alert variant="success" show={this.state.showSuccessAlert} className="block">
+                            {this.state.successText}
+                        </Alert>
+                    </div>
+
                     <Button variant="secondary" onClick={this.handleClose}>
                         Close
                     </Button>
