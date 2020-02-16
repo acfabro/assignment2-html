@@ -38,6 +38,13 @@ export default class SubscriberForm extends Component {
     }
 
     submitNewField() {
+        if (!this.state.newField.title ||
+            !this.state.newField.type ||
+            !this.state.newField.value
+        ) {
+            return;
+        }
+
         this.props.onAddField(this.state.newField);
 
         this.setState({
@@ -121,6 +128,14 @@ export default class SubscriberForm extends Component {
                                     onChange={event => this.props.onChangeField(event, index)}/>
                             </Col>
                         </Form.Group>
+
+                        <Form.Group as={Row} controlId="newDelete">
+                            <Col md={{span: 9, offset: 3}}>
+                                <Button variant="danger" size="sm">Delete {item.title}</Button>
+                            </Col>
+                        </Form.Group>
+
+                        <hr/>
 
                     </div>
                 ))}

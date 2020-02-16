@@ -155,7 +155,8 @@ export default class CreateSubscriberModal extends Component {
                         data={this.state.formData}
                         onChange={this.handleFormChange}
                         onChangeField={this.handleFieldsChange}
-                        onAddField={this.handleAddField}/>
+                        onAddField={this.handleAddField}
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
