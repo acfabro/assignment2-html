@@ -163,12 +163,6 @@ export default class CreateSubscriberModal extends Component {
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert variant="danger" show={this.state.showErrorAlert}>
-                        {this.state.errorText}
-                    </Alert>
-                    <Alert variant="success" show={this.state.showSuccessAlert}>
-                        {this.state.successText}
-                    </Alert>
                     <SubscriberForm
                         data={this.state.formData}
                         onChange={this.handleFormChange}

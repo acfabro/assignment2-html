@@ -31,6 +31,7 @@ export default class UpdateSubscriberModal extends Component {
             },
         };
 
+        this.handleDelete = this.handleDelete.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleAddField = this.handleAddField.bind(this);
         this.handleFieldsChange = this.handleFieldsChange.bind(this);
@@ -98,7 +99,7 @@ export default class UpdateSubscriberModal extends Component {
                     showErrorAlert: true,
                     errorText: error.response ? error.response.data.message : 'An error occurred',
                 });
-                animateScroll.scrollToTop();
+                animateScroll.scrollToTop({});
             })
     };
 
@@ -246,12 +247,6 @@ export default class UpdateSubscriberModal extends Component {
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Alert variant="danger" show={this.state.showErrorAlert}>
-                        {this.state.errorText}
-                    </Alert>
-                    <Alert variant="success" show={this.state.showSuccessAlert}>
-                        {this.state.successText}
-                    </Alert>
                     {this.state.showForm &&
                     <SubscriberForm
                         data={this.state.formData}
