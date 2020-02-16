@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Modal, Button, Spinner} from "react-bootstrap";
+import {Modal, Button, Spinner, Alert} from "react-bootstrap";
 import axios from "axios";
 import SubscriberForm from "./SubscriberForm";
 
@@ -91,6 +91,12 @@ export default class UpdateSubscriberModal extends Component {
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <Alert variant="danger" show={this.state.showErrorAlert}>
+                        {this.state.errorText}
+                    </Alert>
+                    <Alert variant="success" show={this.state.showSuccessAlert}>
+                        {this.state.successText}
+                    </Alert>
                     <SubscriberForm
                         data={this.state.formData}
                         onChange={this.handleFormChange}/>

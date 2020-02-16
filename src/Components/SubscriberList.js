@@ -1,18 +1,18 @@
 import React, {Component, useState} from 'react';
-import {Table, Button} from "react-bootstrap";
+import {Table, Button, Spinner, Modal} from "react-bootstrap";
 import axios from 'axios';
 
 import CreateSubscriberModal from "./CreateSubscriberModal";
 import UpdateSubscriberModal from "./UpdateSubscriberModal";
 
 import config from '../config';
+
 const API_URL = config.API_URL;
 
 export default class SubscriberList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,
             isLoading: false,
             subscribers: [],
         };
@@ -21,17 +21,7 @@ export default class SubscriberList extends Component {
     }
 
     componentDidMount() {
-        // fetch data here
-        axios.get(`${API_URL}/api/subscriber`)
-            .then(response => {
-                this.setState({
-                    subscribers: response.data.data,
-                    isLoaded: true,
-                    showAddSubscriberModal: false,
-                    showEditSubscriberModal: false,
-                });
-            })
-            .catch(error => console.log(error));
+        this.serviceFetchData();
     }
 
     handleShowAddSubscriber = () => {
@@ -49,11 +39,31 @@ export default class SubscriberList extends Component {
 
     handleCloseAddSubscriber = () => {
         this.setState({showAddSubscriberModal: false});
+        this.serviceFetchData();
     };
 
     handleCloseEditSubscriber = () => {
         this.setState({showEditSubscriberModal: false});
+        this.serviceFetchData();
     };
+
+    serviceFetchData() {
+        this.setState({
+            isLoading: true,
+        });
+
+        // fetch data here
+        axios.get(`${API_URL}/api/subscriber`)
+            .then(response => {
+                this.setState({
+                    subscribers: response.data.data,
+                    isLoading: false,
+                    showAddSubscriberModal: false,
+                    showEditSubscriberModal: false,
+                });
+            })
+            .catch(error => console.log(error));
+    }
 
     render() {
         const {subscribers} = this.state;
@@ -64,14 +74,25 @@ export default class SubscriberList extends Component {
                     title="Add new subscriber"
                     show={this.state.showAddSubscriberModal}
                     data={this.state.formData}
-                    onClose={this.handleCloseAddSubscriber} />
+                    onClose={this.handleCloseAddSubscriber}/>
                 <UpdateSubscriberModal
                     title="Edit subscriber"
                     show={this.state.showEditSubscriberModal}
                     data={this.state.formData}
-                    onClose={this.handleCloseEditSubscriber} />
+                    onClose={this.handleCloseEditSubscriber}/>
                 <div className="text-right offset-lg-2 col-lg-8 p-3">
-                    <Button className="" onClick={this.handleShowAddSubscriber}>Add subscriber</Button>
+                    {this.state.isLoading ?
+                        <Button variant="primary" disabled>
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            /> Loading
+                        </Button> :
+                        <Button className="" onClick={this.handleShowAddSubscriber}>Add subscriber</Button>
+                    }
                 </div>
                 <Table className="subscriber-list-table rounded-lg table-hover offset-lg-2 col-lg-8">
                     <thead>
