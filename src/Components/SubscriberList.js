@@ -2,10 +2,10 @@ import React, {Component, useState} from 'react';
 import {Table, Button} from "react-bootstrap";
 import axios from 'axios';
 
-import config from '../config';
 import CreateSubscriberModal from "./CreateSubscriberModal";
 import UpdateSubscriberModal from "./UpdateSubscriberModal";
 
+import config from '../config';
 const API_URL = config.API_URL;
 
 export default class SubscriberList extends Component {
@@ -43,6 +43,7 @@ export default class SubscriberList extends Component {
     handleShowEditSubscriber = (item) => {
         this.setState({
             showEditSubscriberModal: true,
+            formData: item,
         });
     };
 
@@ -54,15 +55,6 @@ export default class SubscriberList extends Component {
         this.setState({showEditSubscriberModal: false});
     };
 
-    handleDeleteClicked = item => {
-        const newArray = this.state.subscribers.filter(row => row.id !== item.id);
-        this.setState({subscribers: newArray});
-    };
-
-    handleEditClicked = item => {
-        console.log('Edit', item);
-    };
-
     render() {
         const {subscribers} = this.state;
 
@@ -71,12 +63,16 @@ export default class SubscriberList extends Component {
                 <CreateSubscriberModal
                     title="Add new subscriber"
                     show={this.state.showAddSubscriberModal}
+                    data={this.state.formData}
                     onClose={this.handleCloseAddSubscriber} />
                 <UpdateSubscriberModal
                     title="Edit subscriber"
                     show={this.state.showEditSubscriberModal}
+                    data={this.state.formData}
                     onClose={this.handleCloseEditSubscriber} />
-                <Button className="m-3" onClick={this.handleShowAddSubscriber}>Add subscriber</Button>
+                <div className="text-right offset-lg-2 col-lg-8 p-3">
+                    <Button className="" onClick={this.handleShowAddSubscriber}>Add subscriber</Button>
+                </div>
                 <Table className="subscriber-list-table rounded-lg table-hover offset-lg-2 col-lg-8">
                     <thead>
                     <tr>

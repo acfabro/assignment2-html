@@ -31,7 +31,7 @@ export default class UpdateSubscriberModal extends Component {
                     <Modal.Title>{this.props.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <SubscriberForm data={this.state.formData} />
+                    <SubscriberForm data={this.props.data} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
