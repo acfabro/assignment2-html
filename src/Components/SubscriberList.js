@@ -13,8 +13,8 @@ export default class SubscriberList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
-            subscribers: [],
+            isLoading: false, // is data loading
+            subscribers: [],  // main list of subscribers, without fields
         };
 
         this.handleShowAddSubscriber = this.handleShowAddSubscriber.bind(this);
@@ -32,9 +32,19 @@ export default class SubscriberList extends Component {
 
     handleShowEditSubscriber = (item) => {
         this.setState({
-            formData: item,
-            showEditSubscriberModal: true,
+            isLoading: true,
         });
+
+        axios.get(`${API_URL}/api/subscriber/${item.id}`)
+            .then(response => {
+                console.log('Show0', response.data.data);
+                this.setState({
+                    isLoading: false,
+                    formData: response.data.data,
+                    showEditSubscriberModal: true,
+                });
+            })
+            .catch(error => console.log(error));
     };
 
     handleCloseAddSubscriber = () => {

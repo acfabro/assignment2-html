@@ -32,6 +32,8 @@ export default class UpdateSubscriberModal extends Component {
 
         this.handleDelete = this.handleDelete.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
+        this.handleAddField = this.handleAddField.bind(this);
+        this.handleFieldsChange = this.handleFieldsChange.bind(this);
     }
 
     /**
@@ -63,6 +65,8 @@ export default class UpdateSubscriberModal extends Component {
      * Pass the form data from props to state when onShow is called
      */
     handleShow = () => {
+        console.log(this.props.data);
+
         this.setState({
             formData: this.props.data
         })
@@ -140,6 +144,45 @@ export default class UpdateSubscriberModal extends Component {
         });
     }
 
+    handleFieldsChange(event, index) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        const fields = this.state.formData.fields;
+        fields[index] = {
+            [name]: value
+        };
+
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                fields: [
+                    ...this.state.formData.fields
+                ]
+            }
+        });
+    }
+
+    /**
+     * A new field is added
+     * @param newField
+     */
+    handleAddField(newField) {
+        console.log(newField);
+
+        // add the new field to formData.fields
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                fields: [
+                    ...this.state.formData.fields,
+                    newField,
+                ]
+            }
+        });
+    }
+
     render() {
         return (
             <Modal show={this.props.show} onShow={this.handleShow} onHide={this.handleClose}>
@@ -156,7 +199,10 @@ export default class UpdateSubscriberModal extends Component {
                     {this.state.showForm &&
                     <SubscriberForm
                         data={this.state.formData}
-                        onChange={this.handleFormChange}/>
+                        onChange={this.handleFormChange}
+                        onChangeField={this.handleFieldsChange}
+                        onAddField={this.handleAddField}
+                    />
                     }
                 </Modal.Body>
                 <Modal.Footer>
