@@ -105,14 +105,18 @@ export default class SubscriberList extends Component {
                     </thead>
 
                     <tbody>
-                    {subscribers.map && subscribers.map(item => (
+                    {subscribers.length ? subscribers.map(item => (
                         <tr key={item.id} onClick={() => this.handleShowEditSubscriber(item)}>
                             <td>{item.id}</td>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
                             <td>{item.state}</td>
                         </tr>
-                    ))}
+                    )) :
+                        <tr>
+                            <td colSpan="5">There's nothing here yet. Go click "<strong>Add Subscriber</strong>"</td>
+                        </tr>
+                    }
                     </tbody>
                 </Table>
             </div>

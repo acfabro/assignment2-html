@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+thead {
+  background-color: antiquewhite;
+}
+
 .subscriber-list-table {
   background-color: #ffffff;
 }
