@@ -131,7 +131,10 @@ export default class SubscriberForm extends Component {
 
                         <Form.Group as={Row} controlId="newDelete">
                             <Col md={{span: 9, offset: 3}}>
-                                <Button variant="danger" size="sm">Delete {item.title}</Button>
+                                <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={() => this.props.onDeleteField(index)}>Delete {item.title}</Button>
                             </Col>
                         </Form.Group>
 

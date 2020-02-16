@@ -30,6 +30,7 @@ export default class CreateSubscriberModal extends Component {
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleAddField = this.handleAddField.bind(this);
         this.handleFieldsChange = this.handleFieldsChange.bind(this);
+        this.handleDeleteField = this.handleDeleteField.bind(this);
     }
 
     handleClose = () => {
@@ -120,6 +121,22 @@ export default class CreateSubscriberModal extends Component {
     }
 
     /**
+     * Delete a field
+     * @param index
+     */
+    handleDeleteField(index) {
+        let fields = this.state.formData.fields;
+        fields.splice(index, 1);
+
+        this.setState({
+            ...this.state.formData,
+            fields: [
+                ...fields
+            ]
+        });
+    }
+
+    /**
      * A new field is added
      * @param newField
      */
@@ -156,6 +173,7 @@ export default class CreateSubscriberModal extends Component {
                         onChange={this.handleFormChange}
                         onChangeField={this.handleFieldsChange}
                         onAddField={this.handleAddField}
+                        onDeleteField={this.handleDeleteField}
                     />
                 </Modal.Body>
                 <Modal.Footer>

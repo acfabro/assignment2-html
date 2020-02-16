@@ -34,6 +34,7 @@ export default class UpdateSubscriberModal extends Component {
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleAddField = this.handleAddField.bind(this);
         this.handleFieldsChange = this.handleFieldsChange.bind(this);
+        this.handleDeleteField = this.handleDeleteField.bind(this);
     }
 
     /**
@@ -109,7 +110,7 @@ export default class UpdateSubscriberModal extends Component {
             showSuccessAlert: false,
         });
 
-        axios.delete(`${API_URL}/api/subscriber/${this.state.formData.id}`, this.state.formData)
+        axios.delete(`${API_URL}/api/subscriber/${this.state.formData.id}`)
             .then((response) => {
                 this.setState({
                     isDeleting: false,
@@ -128,7 +129,7 @@ export default class UpdateSubscriberModal extends Component {
     }
 
     /**
-     * Form changes
+     * Primary form value changes
      * @param event
      */
     handleFormChange(event) {
@@ -144,6 +145,11 @@ export default class UpdateSubscriberModal extends Component {
         });
     }
 
+    /**
+     * handler when values in the fields have changed
+     * @param event
+     * @param index
+     */
     handleFieldsChange(event, index) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -161,6 +167,49 @@ export default class UpdateSubscriberModal extends Component {
                     ...this.state.formData.fields
                 ]
             }
+        });
+    }
+
+    /**
+     * Delete a field
+     * @param index
+     */
+    handleDeleteField(index) {
+        // if the field is a saved item call api to delete
+        if (this.state.formData.fields[index] && this.state.formData.fields[index].id) {
+            axios.delete(`${API_URL}/api/field/${this.state.formData.fields[index].id}`)
+                .then((response) => {
+                    this.setState({
+                        isDeleting: false,
+                        showSuccessAlert: true,
+                        successText: response.data.message,
+                    });
+                    this.deleteFieldFromArray(index);
+                })
+                .catch((error) => {
+                    this.setState({
+                        isDeleting: false,
+                        showErrorAlert: true,
+                        errorText: error.response ? error.response.data.message : 'An error occurred',
+                    });
+                });
+        }
+
+        // just delete from the array
+        else {
+            this.deleteFieldFromArray(index);
+        }
+    }
+
+    deleteFieldFromArray(index) {
+        let fields = this.state.formData.fields;
+        fields.splice(index, 1);
+
+        this.setState({
+            ...this.state.formData,
+            fields: [
+                ...fields
+            ]
         });
     }
 
@@ -202,6 +251,7 @@ export default class UpdateSubscriberModal extends Component {
                         onChange={this.handleFormChange}
                         onChangeField={this.handleFieldsChange}
                         onAddField={this.handleAddField}
+                        onDeleteField={this.handleDeleteField}
                     />
                     }
                 </Modal.Body>
