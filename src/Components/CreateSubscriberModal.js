@@ -31,14 +31,39 @@ export default class CreateSubscriberModal extends Component {
     }
 
     handleClose = () => {
+        this.setState({
+            isSaving: false,
+            showErrorAlert: false,
+            errorText: '',
+            showSuccessAlert: false,
+            successText: '',
+            formData: {
+                name: '',
+                email: '',
+                state: '',
+                fields: [],
+            },
+        });
         this.props.onClose();
     };
 
     handleSave = () => {
+        console.log('Saving: ', this.state.formData);
+
+        this.setState({
+            isSaving: true,
+            showErrorAlert: false,
+            showSuccessAlert: false,
+        });
+
         this.setState({isSaving: true});
         axios.post(`${API_URL}/api/subscriber`, this.state.formData)
             .then((response) => {
-                this.setState({isSaving: false});
+                this.setState({
+                    isSaving: false,
+                    showSuccessAlert: true,
+                    successText: response.data.message,
+                });
             })
             .catch((error) => {
                 this.setState({
@@ -49,16 +74,9 @@ export default class CreateSubscriberModal extends Component {
             })
     };
 
-    handleChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-
+    handleChange(formData) {
         this.setState({
-            formData: {
-                ...this.state.formData,
-                [name]: value
-            }
+            formData
         });
     }
 
