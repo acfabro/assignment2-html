@@ -28,6 +28,8 @@ export default class CreateSubscriberModal extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
+        this.handleAddField = this.handleAddField.bind(this);
+        this.handleFieldsChange = this.handleFieldsChange.bind(this);
     }
 
     handleClose = () => {
@@ -48,6 +50,8 @@ export default class CreateSubscriberModal extends Component {
     };
 
     handleSave = () => {
+        console.log('Saving:', this.state.formData);
+
         this.setState({
             isSaving: true,
             showErrorAlert: false,
@@ -78,6 +82,10 @@ export default class CreateSubscriberModal extends Component {
         });
     }
 
+    /**
+     * handle changes in the inner form
+     * @param event
+     */
     handleFormChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -87,6 +95,45 @@ export default class CreateSubscriberModal extends Component {
             formData: {
                 ...this.state.formData,
                 [name]: value
+            }
+        });
+    }
+
+    handleFieldsChange(event, index) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        const fields = this.state.formData.fields;
+        fields[index] = {
+            [name]: value
+        };
+
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                fields: [
+                    ...this.state.formData.fields
+                ]
+            }
+        });
+    }
+
+    /**
+     * A new field is added
+     * @param newField
+     */
+    handleAddField(newField) {
+        console.log(newField);
+
+        // add the new field to formData.fields
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                fields: [
+                    ...this.state.formData.fields,
+                    newField,
+                ]
             }
         });
     }
@@ -104,7 +151,11 @@ export default class CreateSubscriberModal extends Component {
                     <Alert variant="success" show={this.state.showSuccessAlert}>
                         {this.state.successText}
                     </Alert>
-                    <SubscriberForm data={this.state.formData} onChange={this.handleFormChange}/>
+                    <SubscriberForm
+                        data={this.state.formData}
+                        onChange={this.handleFormChange}
+                        onChangeField={this.handleFieldsChange}
+                        onAddField={this.handleAddField}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
@@ -129,5 +180,4 @@ export default class CreateSubscriberModal extends Component {
             </Modal>
         );
     }
-
 }

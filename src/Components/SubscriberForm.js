@@ -13,8 +13,40 @@ export default class SubscriberForm extends Component {
                 email: '',
                 state: '',
                 fields: [],
-            }
+            },
+            newField: {
+                title: '',
+                type: '',
+                value: '',
+            },
         };
+        this.changeAddField = this.changeAddField.bind(this);
+        this.submitNewField = this.submitNewField.bind(this);
+    }
+
+    changeAddField(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            newField: {
+                ...this.state.newField,
+                [name]: value
+            }
+        });
+    }
+
+    submitNewField() {
+        this.props.onAddField(this.state.newField);
+
+        this.setState({
+            newField: {
+                title: '',
+                type: '',
+                value: '',
+            }
+        });
     }
 
     render() {
@@ -45,19 +77,68 @@ export default class SubscriberForm extends Component {
                     </Form.Control>
                 </Form.Group>
 
+                {data.fields.length > 0 &&
+                    <h5>Fields</h5>
+                }
+
+                {data.fields && data.fields.map((item, index) => (
+                    <div key={index}>
+                        <Form.Group as={Row} controlId="newTitle">
+                            <Form.Label column md="3">Title</Form.Label>
+                            <Col md="9">
+                                <Form.Control
+                                    type="text"
+                                    name="title"
+                                    value={item.title}
+                                    onChange={event => this.props.onChangeField(event, index)}/>
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="newType">
+                            <Form.Label column md="3">Type</Form.Label>
+                            <Col md="9">
+                                <Form.Control
+                                    as="select"
+                                    name="type"
+                                    value={item.type}
+                                    onChange={event => this.props.onChangeField(event, index)}>
+                                    <option value=""></option>
+                                    <option value="string">String</option>
+                                    <option value="number">Number</option>
+                                    <option value="date">Date</option>
+                                    <option value="boolean">Boolean</option>
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="newTitle">
+                            <Form.Label column md="3">Value</Form.Label>
+                            <Col md="9">
+                                <Form.Control
+                                    type="text"
+                                    name="value"
+                                    value={item.value}
+                                    onChange={event => this.props.onChangeField(event, index)}/>
+                            </Col>
+                        </Form.Group>
+
+                    </div>
+                ))}
+
                 <div className="formPanel rounded p-3">
                     <h5>Add field</h5>
                     <Form.Group as={Row} controlId="newTitle">
                         <Form.Label column md="3">Title</Form.Label>
                         <Col md="9">
-                            <Form.Control type="email"/>
+                            <Form.Control type="text" name="title" onChange={this.changeAddField}/>
                         </Col>
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="newType">
                         <Form.Label column md="3">Type</Form.Label>
                         <Col md="9">
-                            <Form.Control as="select">
+                            <Form.Control as="select" name="type" onChange={this.changeAddField}>
+                                <option value=""></option>
                                 <option value="string">String</option>
                                 <option value="number">Number</option>
                                 <option value="date">Date</option>
@@ -66,9 +147,16 @@ export default class SubscriberForm extends Component {
                         </Col>
                     </Form.Group>
 
+                    <Form.Group as={Row} controlId="newTitle">
+                        <Form.Label column md="3">Value</Form.Label>
+                        <Col md="9">
+                            <Form.Control type="text" name="value" onChange={this.changeAddField}/>
+                        </Col>
+                    </Form.Group>
+
                     <Form.Group as={Row} controlId="newType">
                         <Col md={{span: 9, offset: 3}}>
-                            <Button size="sm">Add Field</Button>
+                            <Button size="sm" onClick={this.submitNewField}>Add Field</Button>
                         </Col>
                     </Form.Group>
 
