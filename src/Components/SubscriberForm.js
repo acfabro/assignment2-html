@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Form, Row, Col, Badge} from "react-bootstrap";
+import {Button, Form, Row, Col, Badge, Alert} from "react-bootstrap";
 
 export default class SubscriberForm extends Component {
 
@@ -7,6 +7,7 @@ export default class SubscriberForm extends Component {
         super(props);
 
         this.state = {
+            showValidationError: false,
             formData: {
                 id: '',
                 name: '',
@@ -30,6 +31,7 @@ export default class SubscriberForm extends Component {
         const name = target.name;
 
         this.setState({
+            showValidationError: false,
             newField: {
                 ...this.state.newField,
                 [name]: value
@@ -42,12 +44,14 @@ export default class SubscriberForm extends Component {
             !this.state.newField.type ||
             !this.state.newField.value
         ) {
+            this.setState({showValidationError: true});
             return;
         }
 
         this.props.onAddField(this.state.newField);
 
         this.setState({
+            showValidationError: false,
             newField: {
                 title: '',
                 type: '',
@@ -178,6 +182,11 @@ export default class SubscriberForm extends Component {
 
                     <Form.Group as={Row} controlId="newType">
                         <Col md={{span: 9, offset: 3}}>
+                            {this.state.showValidationError &&
+                            <Alert variant="danger">
+                                Title, type and value are all required
+                            </Alert>
+                            }
                             <Button size="sm" onClick={this.submitNewField}>Add Field</Button>
                         </Col>
                     </Form.Group>
